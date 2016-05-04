@@ -1,10 +1,6 @@
 FROM ubuntu:14.04.2
 MAINTAINER James Kirkby <jkirkby91@gmail.com>
 
-# Surpress Upstart errors/warning
-RUN dpkg-divert --local --rename --add /sbin/initctl
-RUN ln -sf /bin/true /sbin/initctl
-
 # add a non root account
 RUN adduser --disabled-password --gecos "" woodhouse
 
@@ -18,7 +14,7 @@ ADD ./confs/id_rsa.pub /woodhouse/.ssh/id_rsa.pub/
 RUN add-apt-repository ppa:nginx/$nginx && \
 apt-get update && \
 apt-get upgrade -y && \
-apt-get install -y software-properties-common build-essential nano curl wget vim nodejs npm language-pack-en-base sqlite3 libsqlite3-dev gettext-base supervisor monit git nginx php5-fpm php5-mysql php5-curl php5-gd php5-intl php5-mcrypt php5-tidy php5-xmlrpc php5-xsl php5-xdebug php-pear && \
+apt-get install -y sqlite3 libsqlite3-dev supervisor nginx php5-fpm php5-mysql php5-curl php5-gd php5-intl php5-mcrypt php5-tidy php5-xmlrpc php5-xsl php5-xdebug php-pear && \
 apt-get remove --purge -y software-properties-common && \
 apt-get autoremove -y && \
 apt-get clean && \
@@ -43,10 +39,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Use Google Public DNS for resolving domain names.
 # The default is host-only DNS which may not be installed.
 RUN echo "prepend domain-name-servers 8.8.8.8, 8.8.4.4;" >> /etc/dhcp/dhclient.conf
-
-# Set timezone
-RUN echo "Europe/London" > /etc/timezone && \
-dpkg-reconfigure -f noninteractive tzdata
 
 # tweak nginx config
 RUN sed -i -e"s/worker_processes  1/worker_processes 5/" /etc/nginx/nginx.conf && \
