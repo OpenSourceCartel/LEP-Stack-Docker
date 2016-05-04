@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.2
+FROM jkirkby91/ubuntusrvbase
 MAINTAINER James Kirkby <jkirkby91@gmail.com>
 
 # add a non root account
@@ -35,10 +35,6 @@ RUN npm install -g gulp
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Use Google Public DNS for resolving domain names.
-# The default is host-only DNS which may not be installed.
-RUN echo "prepend domain-name-servers 8.8.8.8, 8.8.4.4;" >> /etc/dhcp/dhclient.conf
 
 # tweak nginx config
 RUN sed -i -e"s/worker_processes  1/worker_processes 5/" /etc/nginx/nginx.conf && \
