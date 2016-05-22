@@ -1,0 +1,63 @@
+version: '2'
+services:
+  nginx-01:
+    image: jkirkby91/docker-nginx-naxsi
+    volumes:
+      - "./Sites/:/var/www"
+    ports:
+      - "8181:80"
+    links:
+      - "php5fpm-01"
+    container_name: "web-nginx-01"
+    hostname:  "web-nginx-01"
+
+  php5fpm-01:
+    image: jkirkby91/docker-php5-fpm
+    volumes:
+      - "./Sites/:/var/www"
+    ports:
+      - "9001:9000"
+    links:
+      - "memcached-01"
+      - "memcached-02"
+    container_name: "php5fpm-01"
+    hostname:  "php5fpm-01"
+
+  nginx-02:
+    image: jkirkby91/docker-nginx-naxsi
+    volumes:
+      - "./Sites/:/var/www"
+    ports:
+      - "8282:80"
+    links:
+      - "php5fpm-02"
+    container_name: "web-nginx-02"
+    hostname:  "web-nginx-02"
+
+  php5fpm-02:
+    image: jkirkby91/docker-php5-fpm
+    volumes:
+      - "./Sites/:/var/www"
+    ports:
+      - "9002:9000"
+    links:
+      - "memcached-01"
+      - "memcached-02"
+    container_name: "php5fpm-02"
+    hostname:  "php5fpm-02"
+
+  memcached-01:
+      build:
+        image: jkirkby91/docker-memcached
+      ports:
+        - "9898:11211"
+      container_name: "memcached-01"
+      hostname: "memcached01"
+
+  memcached-02:
+      build:
+        image: jkirkby91/docker-memcached
+      ports:
+        - "9999:11211"
+      container_name: "memcached-02"
+      hostname: "memcached02"
