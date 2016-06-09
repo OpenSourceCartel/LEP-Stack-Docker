@@ -1,17 +1,17 @@
 version: '2'
 services:
-  nginx-01:
+  nginx:
     image: jkirkby91/docker-nginx-naxsi
     volumes:
       - "./Sites/:/var/www"
     ports:
       - "8181:80"
     links:
-      - "php5fpm-01"
+      - "php5fpm"
     container_name: "web-nginx-01"
     hostname:  "web-nginx-01"
 
-  php5fpm-01:
+  php5fpm:
     image: jkirkby91/docker-php5-fpm
     volumes:
       - "./Sites/:/var/www"
